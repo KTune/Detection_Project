@@ -15,22 +15,23 @@ gray_img = cv2.cvtColor(test1, cv2.COLOR_BGR2GRAY)
 
 
 
-
-def loadclassifier(img): #TODO rename и вынести в файл
+def face_swap(img):
+    gray_img = cv2.cvtColor(test1, cv2.COLOR_BGR2GRAY)
+     #TODO rename и вынести в файл
     haar_face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     faces = haar_face_cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=5)
-    return faces
 
 
-def crop(faces):
+
+
     crops = []
     for (x, y, w, h) in faces:
         crop_img = test1[y:y+h, x:x+w].copy()
         crops.append(crop_img)
         print(x, y, w, h)
-    return crops
 
-def faceswap(faces, crops):
+
+
     for (x, y, w, h) in faces:
         coords = {'A': x, 'B': y, 'C': w, 'D': h}
         co = []
@@ -44,12 +45,12 @@ def faceswap(faces, crops):
             crop2 = cv2.resize(crops[0], (w, h))
             test1[y:y + h, x:x + w] = crop2.copy()
 
-    cv2.imwrite('swapped_faces.png', test1)
+        cv2.imwrite('swapped_faces.png', test1)
 
 
 
 
-faceswap(loadclassifier(gray_img), crop(loadclassifier(gray_img)))
+face_swap(test1)
 
 
 
