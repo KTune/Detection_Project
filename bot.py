@@ -3,7 +3,8 @@ import telebot
 from telebot import types
 from telebot.types import Message
 import cv2
-import invert
+from invert import apply_invert
+import requests
 
 TOKEN = '895248757:AAH7tjGZjkiRSyAOCInlSn4F0auuaqD55XE'
 bot = telebot.TeleBot(TOKEN)
@@ -36,16 +37,37 @@ def start_invert(message):
 def send_invert(message):
     if bot.message_handler(content_types=['photo']):
         try:
-            file_info = bot.get_file(message.photo[len(message.photo)-1].file_id)
-            # downloaded_file = bot.download_file(file_info.file_path)
+            file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
+            # filePath = file_info.file_path
+            downloaded_file = bot.download_file(file_info.file_path)
 
-            src = file_info.file_path;
-            # with open(src, 'wb') as new_photo:
-            photo = cv2.imread(src)
-            inverted_photo1 = cv2.imread(cv2.bitwise_not(photo))
-            inverted_photo2 = cv2.imwrite("inverted_photo1", inverted_photo1)
-            # inverted_photo = apply_invert(new_photo)
-            bot.send_photo(message.chat.id, inverted_photo1)
+            # src = file_info.file_path
+            with open("photos/inving" + str(message.chat.id) + ".jpg", 'wb') as new_file:
+                new_file.write(downloaded_file)
+            apply_invert("photos/inving" + str(message.chat.id) + ".jpg", message)
+            result = "results/inved" + str(message.chat.id) + ".jpg"
+            bot.send_photo(message.chat.id, (open(result, "rb")))
+
+            #     inverted_photo = apply_invert(str(message.chat.id) + ".jpg")
+            #     bot.send_photo(message.chat.id, inverted_photo)
+            # os.remove(str(message.chat.id) + ".jpg")
+            # src = file_info.file_path
+            # with open(src, 'wb') as new_file:
+            #     photo = new_file.write(downloaded_file)
+                # opened_photo = cv2.imread(photo)
+                # inverted_photo = apply_invert(opened_photo)
+
+    #         file_info = bot.get_file(message.photo[len(message.photo)-1].file_id)
+    #         downloaded_file = bot.download_file(file_info.file_path)
+    #
+    #         src = file_info.file_path;
+    #         with open(downloaded_file, 'wb') as new_photo:
+    #         photo = cv2.imread(new_photo)
+    #         inverted_photo1 = cv2.bitwise_not(new_photo)
+    #         inverted_photo2 = cv2.imwrite("inverted_photo1", inverted_photo1)
+    #         # inverted_photo = apply_invert(new_photo)
+    #         inverted_photo = apply_invert(downloaded_file)
+    #         bot.send_photo(message.chat.id, inverted_photo)
         except Exception as e:
             bot.send_message(message.chat.id, e)
     else:
@@ -58,8 +80,7 @@ def handle_face_swap(message):
         file_info = bot.get_file(message.photo[len(message.photo)-1].file_id)
         downloaded_file = bot.download_file(file_info.file_path)
 
-        src = file_info.file_path;
-        with open(src, 'wb') as new_file:
+        with open("photos/new_file.jpg", 'wb') as new_file:
             new_file.write(downloaded_file)
         bot.send_message(message.chat.id, "Фото добавлено")
     except Exception as e:
