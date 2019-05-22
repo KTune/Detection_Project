@@ -4,6 +4,8 @@ from telebot import types
 from telebot.types import Message
 import cv2
 from invert import apply_invert
+import run_face_swap
+from run_face_swap import face_swap
 import requests
 
 TOKEN = '895248757:AAH7tjGZjkiRSyAOCInlSn4F0auuaqD55XE'
@@ -56,14 +58,27 @@ def send_invert(message):
 @bot.message_handler(content_types=['photo'])
 def handle_face_swap(message):
     try:
-        file_info = bot.get_file(message.photo[len(message.photo)-1].file_id)
+        file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
         downloaded_file = bot.download_file(file_info.file_path)
 
-        with open("photos/new_file.jpg", 'wb') as new_file:
+        with open("photos/swapping" + str(message.message_id) + ".jpg", 'wb') as new_file:
             new_file.write(downloaded_file)
-        bot.send_message(message.chat.id, "Фото добавлено")
+        face_swap("photos/swapping" + str(message.message_id) + ".jpg", message)
+        result = "photos/swapped" + str(message.message_id) + ".jpg"
+        bot.send_photo(message.chat.id, (open(result, "rb")))
+        os.remove("photos/swapping" + str(message.message_id) + ".jpg")
+        os.remove(result)
     except Exception as e:
         bot.send_message(message.chat.id, e)
+
+    #     file_info = bot.get_file(message.photo[len(message.photo)-1].file_id)
+    #     downloaded_file = bot.download_file(file_info.file_path)
+    #
+    #     with open("photos/new_file.jpg", 'wb') as new_file:
+    #         new_file.write(downloaded_file)
+    #     bot.send_message(message.chat.id, "Фото добавлено")
+    # except Exception as e:
+    #     bot.send_message(message.chat.id, e)
 
 
 @bot.message_handler(func=lambda message: True)
