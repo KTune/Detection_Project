@@ -1,14 +1,13 @@
-import cv2
-import telebot
-from telebot.types import Message
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-# photo = "sonic.png"
+import cv2
 
 
 def apply_invert(photo, message):
     opened_photo = cv2.imread(photo)
     inved_photo = cv2.bitwise_not(opened_photo)
-    cv2.imwrite("results/inved" + str(message.chat.id) + ".jpg", inved_photo)
+    cv2.imwrite("photos/inved" + str(message.message_id) + ".jpg", inved_photo)
     cv2.destroyAllWindows()
 
 
