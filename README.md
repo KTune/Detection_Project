@@ -1,4 +1,4 @@
-# Fhoto Booth Telegram Bot
+# Photo Booth Telegram Bot
 that can  
 - invert colors in a photo, 
 
