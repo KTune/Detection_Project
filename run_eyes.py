@@ -6,13 +6,14 @@ def convertToRGB(img):
 
 
 def apply_big_eyes(img, message):
+    opened_img = cv2.imread(img)
     haar_eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray_img = cv2.cvtColor(opened_img, cv2.COLOR_BGR2GRAY)
     eyes = haar_eye_cascade.detectMultiScale(gray_img, scaleFactor=1.3, minNeighbors=6)
 
     crops = []
     for (x, y, w, h) in eyes:
-        crop_img = img[y:y + h, x:x + w].copy()
+        crop_img = opened_img[y:y + h, x:x + w].copy()
         crop_img = cv2.resize(crop_img, (2 * w, 2 * h))
         crops.append(crop_img)
 
@@ -22,6 +23,6 @@ def apply_big_eyes(img, message):
 
         for (x, y, w, h), i in zip(eyes, range(len(crops))):
             # crops[i] = cv2.resize(crops[i],(2*w,2*h))
-            img[y:y + 2 * h, x:x + 2 * w] = crops[i].copy()
+            opened_img[y:y + 2 * h, x:x + 2 * w] = crops[i].copy()
 
-        cv2.imwrite("photos/eyed" + str(message.message_id) + ".jpg", convertToRGB(img))
+        cv2.imwrite("photos/eyed" + str(message.message_id) + ".jpg", opened_img)
