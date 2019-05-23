@@ -2,33 +2,39 @@
 # -*- coding: utf-8 -*-
 
 import os
+import random
 import telebot
-from telebot import types
 
-from run_invert import apply_invert
-from run_eyes import apply_big_eyes
-from run_face_swap import apply_face_swap
+from effects.photo_invert import apply_invert
+from effects.big_eyes import apply_big_eyes
+from effects.face_swap import apply_face_swap
+
+from useful_lists import meme_files
 
 
-TOKEN = '895248757:AAH7tjGZjkiRSyAOCInlSn4F0auuaqD55XE'
+TOKEN = '895248757:AAEv-QQGRkH2WlQ3VAiicuZCEy5PkplbT2U'
 bot = telebot.TeleBot(TOKEN)
 
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, "Привет! Я Bot the Face Swapper! Пришли мне свою фотку.")
+    bot.send_message(message.chat.id, "Привет! Я Photo Booth Bot - Фотобудка!\n"
+                                      "Хочешь узнать, что я могу? Кидай мне /help")
 
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    bot.send_message(message.chat.id, "Сейчас я могу:\n" "/meme - прислать свой любимый мем :)\n")
+    bot.send_message(message.chat.id, "Сейчас я умею:\n" "/invert - инвертировать изображение(делать негатив)\n" 
+                                      "/eyes - увеличивать глаза на фотке(немножко страшно)\n"
+                                      "/meme - присылать свои любимые мемы :)\n"
+                                      "А ещё я могу менять лица на фотках местами - делать face swap. Это так весело!\n"
+                                      "Для этого просто отправь мне фото, на котором 2 и больше лиц :)")
 
 
 @bot.message_handler(commands=['meme'])
 def send_meme(message):
-    # meme = open('sonic.png', 'rb')
 
-    with open('sonic.png', 'rb') as meme:
+    with open(random.choice(meme_files), 'rb') as meme:
         bot.send_photo(message.chat.id, meme)
 
 
@@ -46,15 +52,12 @@ def send_invert(message):
 
             with open("photos/inving" + str(message.message_id) + ".jpg", 'wb') as new_file:
                 new_file.write(downloaded_file)
-            apply_invert("photos/inving" + str(message.message_id) + ".jpg", message)
-            result = "photos/inved" + str(message.message_id) + ".jpg"
-            bot.send_photo(message.chat.id, (open(result, "rb")))
-            os.remove("photos/inving" + str(message.message_id) + ".jpg")
-            os.remove(result)
+            apply_invert("photos/inving" + str(message.message_id) + ".jpg", message, bot)
         except Exception as e:
-            bot.send_message(message.chat.id, e)
+            print(e)
+            bot.send_message(message.chat.id, "Ой, шарики за ролики заехали. Что-то не так.")
     else:
-        bot.send_message(message.chat.id, "Что-то я не понял...")
+        bot.send_message(message.chat.id, "Моя магия почему-то не сработала. Попробуй снова /invert")
 
 
 @bot.message_handler(commands=['eyes'])
@@ -71,15 +74,12 @@ def send_eyes(message):
 
             with open("photos/eyeing" + str(message.message_id) + ".jpg", 'wb') as new_file:
                 new_file.write(downloaded_file)
-            apply_big_eyes("photos/eyeing" + str(message.message_id) + ".jpg", message)
-            result = "photos/eyed" + str(message.message_id) + ".jpg"
-            bot.send_photo(message.chat.id, (open(result, "rb")))
-            os.remove("photos/eyeing" + str(message.message_id) + ".jpg")
-            os.remove(result)
+            apply_big_eyes("photos/eyeing" + str(message.message_id) + ".jpg", message, bot)
         except Exception as e:
-            bot.send_message(message.chat.id, e)
+            print(e)
+            bot.send_message(message.chat.id, "Ой, шарики за ролики заехали. Что-то не так.")
     else:
-        bot.send_message(message.chat.id, "Даже не знаю...")
+        bot.send_message(message.chat.id, "Ничччего не понимаю. Давай начнём сначала - /eyes")
 
 
 @bot.message_handler(content_types=['photo'])
@@ -92,12 +92,13 @@ def handle_face_swap(message):
             new_file.write(downloaded_file)
         apply_face_swap("photos/swapping" + str(message.message_id) + ".jpg", message, bot)
     except Exception as e:
-        bot.send_message(message.chat.id, e)
+        print(e)
+        bot.send_message(message.chat.id, "Ой, шарики за ролики заехали. Что-то не так.")
 
 
 @bot.message_handler(func=lambda message: True)
 def send_dialog(message):
-    bot.send_message(message.chat.id, "Салют!")
+    bot.send_message(message.chat.id, "Щёлк")
 
 
 bot.polling(interval=0, timeout=10)
