@@ -11,12 +11,12 @@ def convertToRGB(img): #TODO в мэйн
 
 
 
-gray_img = cv2.cvtColor(test1, cv2.COLOR_BGR2GRAY)
+#gray_img = cv2.cvtColor(test1, cv2.COLOR_BGR2GRAY)
 
 
 
 def face_swap(img):
-    gray_img = cv2.cvtColor(test1, cv2.COLOR_BGR2GRAY)
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
      #TODO rename и вынести в файл
     haar_face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     faces = haar_face_cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=5)
