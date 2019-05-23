@@ -9,8 +9,6 @@ from run_invert import apply_invert
 from run_eyes import apply_big_eyes
 from run_face_swap import apply_face_swap
 
-# import Eyes
-# from Eyes import big_eyes
 
 TOKEN = '895248757:AAH7tjGZjkiRSyAOCInlSn4F0auuaqD55XE'
 bot = telebot.TeleBot(TOKEN)
