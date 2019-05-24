@@ -6,6 +6,13 @@ def convertToRGB(img):
 
 
 def apply_big_eyes(img, message):
+    ''' Detects eyes on an image and enlarges them.
+
+    :param img: path to an image file
+    :param message:
+    :return: saved image with large eyes
+    '''
+
     opened_img = cv2.imread(img)
     haar_eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
     gray_img = cv2.cvtColor(opened_img, cv2.COLOR_BGR2GRAY)

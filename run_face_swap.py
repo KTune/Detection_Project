@@ -6,6 +6,13 @@ import os
 
 
 def apply_face_swap(img, message, bot):
+    '''
+    Detects faces on the image given, checks the amount of faces, crops and swaps them
+    :param img: path to an image file
+    :param message:
+    :param bot:
+    :return: image with swapped faces on it
+    '''
     opened_img = cv2.imread(img)
     gray_img = cv2.cvtColor(opened_img, cv2.COLOR_BGR2GRAY)
     haar_face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
