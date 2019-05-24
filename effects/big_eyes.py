@@ -3,6 +3,13 @@ import os
 
 
 def apply_big_eyes(img, message, bot):
+    '''
+    Detects eyes on an image, applies eye-enlarging filter if possible.
+    :param img: path to an image file
+    :param message: the message sent to the bot
+    :param bot: telegram bot
+    :return: processed image or a text message
+    '''
     opened_img = cv2.imread(img)
     haar_eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
     gray_img = cv2.cvtColor(opened_img, cv2.COLOR_BGR2GRAY)
@@ -34,4 +41,3 @@ def apply_big_eyes(img, message, bot):
         bot.send_photo(message.chat.id, (open(result, "rb")))
         os.remove("photos/eyeing" + str(message.message_id) + ".jpg")
         os.remove(result)
-

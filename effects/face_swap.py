@@ -6,6 +6,14 @@ import os
 
 
 def apply_face_swap(img, message, bot):
+    '''
+    Detects faces on the image, counts them to make shure the application of the filter is possible,
+    crops the faces and swaps them.
+    :param img: an image given to the bot
+    :param message: message sent to the bot
+    :param bot: telegram bot
+    :return: a processed picture or a text message
+    '''
     opened_img = cv2.imread(img)
     gray_img = cv2.cvtColor(opened_img, cv2.COLOR_BGR2GRAY)
     haar_face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
