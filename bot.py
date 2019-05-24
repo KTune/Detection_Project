@@ -3,6 +3,7 @@
 
 import random
 import telebot
+import time
 
 from effects.photo_invert import apply_invert
 from effects.big_eyes import apply_big_eyes
@@ -11,7 +12,7 @@ from effects.face_swap import apply_face_swap
 from useful_lists import meme_files
 
 
-TOKEN = '895248757:AAEv-QQGRkH2WlQ3VAiicuZCEy5PkplbT2U'
+TOKEN = '<bot_token>'
 bot = telebot.TeleBot(TOKEN)
 
 
@@ -101,3 +102,5 @@ def send_dialog(message):
 
 
 bot.polling(interval=0, timeout=10)
+
+
